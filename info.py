@@ -1,6 +1,6 @@
 from flask import Flask, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -10,6 +10,18 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+db.init_app(app)
+
+
+class Inquiry(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column()
+    comment: Mapped[str] = mapped_column()
+
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
