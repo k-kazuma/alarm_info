@@ -40,9 +40,9 @@ def hello():
         response=json.dumps(inquiries_list, ensure_ascii=False),
         mimetype="application/json",
     )
-
+    print(response.data)
     # JSONレスポンスとして返す
-    return response
+    return response.data
 
 
 @app.route("/post/", methods=["POST", "OPTIONS"])
@@ -65,5 +65,26 @@ def info_post():
         return data
 
 
+@app.route("/inquiry/edit/asdfghjkl11/", methods=["GET", "POST"])
+def inquiry_edit():
+    if request.method == "GET":
+        inquiries = Inquiry.query.all()
+        inquiries_list = [
+            {"id": inquiry.id, "comment": inquiry.comment, "content": inquiry.content}
+            for inquiry in inquiries
+        ]
+        response = app.response_class(
+            response=json.dumps(inquiries_list, ensure_ascii=False),
+            mimetype="application/json",
+        )
+        return response
+
+    if request.method == "POST":
+        return "inquiry_post"
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# http://127.0.0.1:5000/inquiry/edit/asdfghjkl11/
