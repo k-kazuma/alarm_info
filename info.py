@@ -1,7 +1,10 @@
 from flask import Flask, redirect, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import DateTime
+from sqlalchemy.sql import text
 from flask_cors import CORS
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from datetime import datetime
 
 
 class Base(DeclarativeBase):
@@ -19,6 +22,9 @@ db.init_app(app)
 
 class Inquiry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(
+        db.DateTime, default=datetime.now(datetime.UTC), comment="作成日時"
+    )
     content: Mapped[str] = mapped_column()
     comment: Mapped[str] = mapped_column()
 
@@ -33,7 +39,12 @@ def hello():
 
     # データをリスト形式でJSONに変換
     inquiries_list = [
-        {"id": inquiry.id, "comment": inquiry.comment, "content": inquiry.content}
+        {
+            "id": inquiry.id,
+            "created": inquiry.created_at,
+            "comment": inquiry.comment,
+            "content": inquiry.content,
+        }
         for inquiry in inquiries
     ]
     response = app.response_class(
