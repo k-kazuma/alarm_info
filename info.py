@@ -4,7 +4,7 @@ from sqlalchemy import DateTime
 from sqlalchemy.sql import text
 from flask_cors import CORS
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Base(DeclarativeBase):
@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": ["https://alarmscheduler.com"]}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
@@ -23,7 +23,7 @@ db.init_app(app)
 class Inquiry(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(
-        db.DateTime, default=datetime.now(datetime.UTC), comment="作成日時"
+        db.DateTime, default=datetime.now(timezone.utc), comment="作成日時"
     )
     content: Mapped[str] = mapped_column()
     comment: Mapped[str] = mapped_column()
