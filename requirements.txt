@@ -1,3 +1,4 @@
+pip>=24.2
 aiobotocore @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_b3e4znaej2/croot/aiobotocore_1680004294920/work
 aiofiles @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/abs_0ar7qj9rcj/croot/aiofiles_1683773588297/work
 aiohttp @ file:///Users/ec2-user/ci_py311/aiohttp_1678323186748/work
