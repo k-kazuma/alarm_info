@@ -1,4 +1,5 @@
 pip>=24.2
+gunicorn
 Flask
 flask_sqlalchemy
 flask_cors
