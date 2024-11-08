@@ -42,7 +42,6 @@ mail = Mail(app)
 
 db = SQLAlchemy(model_class=Base)
 cors = CORS(app, resources={r"/*": {"origins": ["https://alarmscheduler.com"]}})
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
 db.init_app(app)
 
