@@ -7,24 +7,30 @@ from flask_cors import CORS
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from datetime import datetime, timezone
 
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 
 class Base(DeclarativeBase):
     pass
 
 
 app = Flask(__name__)
+load_dotenv(verbose=True)
+dotenv_path = join(dirname(__file__), ".env")
+load_dotenv(dotenv_path)
+
 
 # flaskmail
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USERNAME"] = "alarm.scheduler@gmail.com"
-app.config["MAIL_PASSWORD"] = "guuf oebg oolg ruvx"
+app.config["MAIL_SERVER"] = os.environ.get("SUPERUSER_MAIL_SERVER")
+app.config["MAIL_PORT"] = os.environ.get("SUPERUSER_MAIL_PORT")
+app.config["MAIL_USERNAME"] = os.environ.get("SUPERUSER_EMAIL")
+app.config["MAIL_PASSWORD"] = os.environ.get("SUPERUSER_MAIL_PASSWORD")
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_DEFAULT_SENDER"] = (
-    "alarm.scheduler@gmail.com"  # これがるとsender設定が不要になる
-)
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("SUPERUSER_EMAIL")
 mail = Mail(app)
 
 
