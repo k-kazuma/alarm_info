@@ -1,4 +1,5 @@
 from flask import Flask, redirect, request, jsonify, json
+from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime
 from sqlalchemy.sql import text
@@ -11,9 +12,29 @@ class Base(DeclarativeBase):
     pass
 
 
-db = SQLAlchemy(model_class=Base)
-
 app = Flask(__name__)
+
+# flaskmail
+
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USERNAME"] = "alarm.scheduler@gmail.com"
+app.config["MAIL_PASSWORD"] = "guuf oebg oolg ruvx"
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_DEFAULT_SENDER"] = (
+    "alarm.scheduler@gmail.com"  # これがるとsender設定が不要になる
+)
+mail = Mail(app)
+
+
+####################################
+
+
+# sqlAlchemy
+
+
+db = SQLAlchemy(model_class=Base)
 cors = CORS(app, resources={r"/*": {"origins": ["https://alarmscheduler.com"]}})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
@@ -31,6 +52,7 @@ class Inquiry(db.Model):
 
 with app.app_context():
     db.create_all()
+######################################################################
 
 
 @app.route("/")
@@ -65,6 +87,11 @@ def info_post():
         data = request.get_json()
         comment = data.get("comment")
         content = data.get("content")
+
+        # サーバーが用意できるまではメールで問い合わせ内容送信
+        msg = Message("【問い合わせ】", recipients=["alarm.scheduler@gmail.com"])
+        msg.body = "タイトル：" + content + "本文：" + comment
+        mail.send(msg)
 
         # 新しいInquiryオブジェクトを作成
         new_inquiry = Inquiry(comment=comment, content=content)
