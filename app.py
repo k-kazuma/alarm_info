@@ -90,7 +90,7 @@ def info_post():
 
         # サーバーが用意できるまではメールで問い合わせ内容送信
         msg = Message("【問い合わせ】", recipients=["alarm.scheduler@gmail.com"])
-        msg.body = "タイトル：" + content + "本文：" + comment
+        msg.body = "タイトル：" + content + "\n" "本文：" + comment
         mail.send(msg)
 
         # 新しいInquiryオブジェクトを作成
