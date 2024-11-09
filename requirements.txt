@@ -4,5 +4,4 @@ Flask
 flask_sqlalchemy
 flask_cors
 flask_mail
-dotenv
 python-dotenv
